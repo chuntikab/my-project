@@ -1,12 +1,12 @@
 ## my-project
-#ถ้าขึ้น chuntika@LAPTOP-IAOG2T3D MINGW64 ~ (main)
-$ git config --global user.name "chuntikab"
-$ git config --global user.email "my..@gmail.com"
-$ git config --global user.password "mypass..."
-$ cd /c/Users/chuntika/gitHub
+##ถ้าขึ้น chuntika@LAPTOP-IAOG2T3D MINGW64 ~ (main)
+#$ git config --global user.name "chuntikab"
+#$ git config --global user.email "my..@gmail.com"
+#$ git config --global user.password "mypass..."
+#$ cd /c/Users/chuntika/gitHub
 
-#เมื่อเปลี่ยนเป็น chuntika@LAPTOP-IAOG2T3D MINGW64 ~/gitHub (main)
-$ git status
+##เมื่อเปลี่ยนเป็น chuntika@LAPTOP-IAOG2T3D MINGW64 ~/gitHub (main)
+#$ git status
   $ git status
   On branch main
   Your branch is up to date with 'origin/main'.
@@ -17,9 +17,9 @@ $ git status
 
   nothing added to commit but untracked files present (use "git add" to track)
 
-$ git add .
+#$ git add .
 
-$ git status
+#$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -52,7 +52,7 @@ Changes to be committed:
         
         
         
-$ git commit -m "ใส่ข้อความบ่งบอกว่าเปลี่ยน/เพิ่มอะไร"
+#$ git commit -m "ใส่ข้อความบ่งบอกว่าเปลี่ยน/เพิ่มอะไร"
 [main 6b8ef96] add project django
  24 files changed, 233 insertions(+)
  create mode 100644 djangoworkshop/db.sqlite3
@@ -82,7 +82,7 @@ $ git commit -m "ใส่ข้อความบ่งบอกว่าเป
  
  
  
- $ git push -u origin main
+ #$ git push -u origin main
 
 
 
