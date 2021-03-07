@@ -2,8 +2,11 @@
 
 # ถ้าขึ้น chuntika@LAPTOP-IAOG2T3D MINGW64 ~ (main)
 #$ git config --global user.name "chuntikab"
+
 #$ git config --global user.email "my..@gmail.com"
+
 #$ git config --global user.password "mypass..."
+
 #$ cd /c/Users/chuntika/gitHub
 
 # เมื่อเปลี่ยนเป็น chuntika@LAPTOP-IAOG2T3D MINGW64 ~/gitHub (main)
