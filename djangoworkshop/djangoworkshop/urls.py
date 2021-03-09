@@ -22,11 +22,14 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('product/',views.product),
     path('',views.index,name="home"),
-    path('category/<slug:category_slug>',views.index,name="product_by_category")
+    path('category/<slug:category_slug>',views.index,name="product_by_category"),
+    path('product/<slug:category_slug>/<slug:product_slug>',views.productPage,name='productDetail'),
+    path('cart/add/<int:product_id>',views.addCart,name="addCart"),
+    path('cartdetail/',views.cartdetail)
 ]
 
+#product/fashion/shoes
 # เช็คว่าเราเปิด DEBUG หรือไม่
 if settings.DEBUG :
     # /media/product/

@@ -1,3 +1,4 @@
+# ส่วนของการ สร้างตาราง DB
 from django.db import models
 from django.urls import reverse
 
@@ -34,10 +35,53 @@ class Product(models.Model): # สินค้า
     def __str__(self):
         return self.name
 
-    class Meta : # เปลี่ยนให้เป็นชื่อภาษาไทย
+    class Meta :
         ordering=('name',) # ใช้ในการ sort เช่น sort ตาม name
+        # เปลี่ยนให้เป็นชื่อภาษาไทย
         verbose_name='สินค้า'
         verbose_name_plural="ข้อมูลสินค้า"
+
+    def get_url(self): 
+        return reverse('productDetail',args=[self.category.slug,self.slug]) # ....
+
+class Cart(models.Model): #ตะกร้าสินค้า / มีการนำคุณสมบัติ models มาใช้
+    cart_id=models.CharField(max_length=255,blank=True) # เป็นค่าว่างได้
+    date_added=models.DateTimeField(auto_now_add=True) # เก็บวันเวลาที่สร้างตะกร้าสินค้า/วันที่ผู้ใช้บริการหยิบสินค้าลงตะกร้า
+
+    # เปลี่ยนตัว obj ให้เป็น str
+    def __str__(self):
+        return self.cart_id
+
+    class Meta:
+        db_table='cart'
+        ordering=('date_added',)
+        # เปลี่ยนให้เป็นชื่อภาษาไทย
+        verbose_name='ตะกร้าสินค้า'
+        verbose_name_plural="ข้อมูลตะกร้าสินค้า"
+
+
+class CartItem(models.Model): # รายการสินค้าในตะกร้า / โยงข้อมูลกับ2โมเดล คือ โมเดลตะกร้าสินค้าที่ใช้จัดเก้บ และ โมเดลสินค้า
+    product=models.ForeignKey(Product,on_delete=models.CASCADE) 
+    cart=models.ForeignKey(Cart,on_delete=models.CASCADE) 
+    quantity=models.IntegerField() # จำนวนรายการสินค้าที่เพิ่มลงตะกร้า
+    active=models.BooleanField(default=True) # 
+
+    class Meta:
+        db_table='cartItem'
+        #ordering=('date_added',)
+        # เปลี่ยนให้เป็นชื่อภาษาไทย
+        verbose_name='รายการสินค้าในตะกร้า'
+        verbose_name_plural="ข้อมูลรายการสินค้าในตะกร้า"
+
+    # ฟังก์ชันในการคำนวนหาผลรวม
+    def sub_total(self): 
+        return self.product.price * self.quantity # <!-- แก้ราคา **************************ใส่เป็นแต้มคะแนน*******************************-->
+
+    # เปลี่ยนตัว obj ให้เป็น str
+    def __str__(self):
+        return self.product.name
+
+
 
 
 
