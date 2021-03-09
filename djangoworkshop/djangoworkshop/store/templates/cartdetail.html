@@ -1,0 +1,58 @@
+<!-- หน้า ตะกร้าสินค้า -->
+{% extends 'layouts.html' %} <!-- extend จาก layouts -->
+{% load static %}
+{% load humanize %} <!-- ใส่ comma ตัวเลขราคา -->
+{% block content%}
+
+<div class="container">
+    {% if not cart_items %}
+        <p>ไม่มีสินค้าในตะกร้า</p>
+    {% else %}
+    <div class="table-responsive cart_info">
+        <table class="table table-condensed">
+            <thead>
+                <tr class="cart_menu">
+                    <td class="image">รายการสินค้า</td> <!-- แก้ -->
+                    <td class="description"></td> <!-- แก้ -->
+                    <td class="price">แต้มคะแนน</td> <!-- แก้ -->
+                    <td class="quantity">จำนวน</td> <!-- แก้ -->
+                    <td class="total">รวม</td> <!-- แก้ -->
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for item in cart_items %}
+                <tr>
+                    <td class="cart_product">
+                        <a href=""><img src="{{item.product.image.url}}" alt="" width="80px" height="80px"></a>
+                    </td>
+                    <td class="cart_description">
+                        <h5><a href="">{{item.product.name}}</a></h5>
+                    </td>
+                    <td class="cart_price">
+                        <p>{{item.product.price| intcomma}}</p>
+                    </td>
+                    <td class="cart_quantity">
+                            <p>{{item.quantity}}</p>
+                        </div>
+                    </td>
+                    <td class="cart_total">
+                        <p class="cart_total_price">{{item.sub_total| intcomma}}</p>
+                    </td>
+                    <td class="cart_delete">
+                        <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h4 class="text-right">ยอด {{total| intcomma}} แต้มคะแนน</h4> <!-- แก้เป็น แต้ม ******************* -->
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+

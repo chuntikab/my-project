@@ -1,44 +1,45 @@
 <nav class="navbar navbar-expand-md navbar-light bg-dark"> <!-- navbar คือ menu ย่อยมาจากโครงสร้าง layouts-->
     
-    <a href="/" class="navbar-brand"><i class="fas fa-heartbeat text-warning fa-2x"></i></a> <!-- เปลี่ยนสีโลโก้ -->
+    <a href="/" class="navbar-brand"><i class="fas fa-heartbeat text-danger fa-4x"></i></a> <!-- เปลี่ยนสี ขนาด โลโก้ -->
     <button type="button" class="navbar-toggler bg-light" data-toggle="collapse"
      data-target="#nav" name="button"><span class="navbar-toggler-icon"></span></button> 
-    
+
     <div class="collapse navbar-collapse justify-content-between" id="nav">
-    
     <ul class="navbar-nav">
-      <li class="nav-item dropdown"><a class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle"
+      <li class="nav-item dropdown">
+        <a class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle"
         href="" data-toggle="dropdown">Category</a> <!-- -->
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">สินค้าทั้งหมด</a><!-- -->
-          <a class="dropdown-item" href="#">เสื้อผ้า</a><!-- -->
+          <a class="dropdown-item" href="{% url 'home' %}">สินค้าทั้งหมด</a><!-- -->
+          {% for category in links %}
+          <a class="dropdown-item" href="{{category.get_url}}">{{category.name}}</a><!-- -->
+          {% endfor %}
         </div>
       </li>
         <li class="nav-item dropdown">
           <a class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle" data-toggle="dropdown">
-            Welcome, Demo<i class="fas fa-user circle"></i> <!-- -->
-          </a>
+            Welcome, Demo<i class="fas fa-user circle"></i></a><!-- -->
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="">ประวัติการสั่งซื้อ</a><!-- -->
+            <a class="dropdown-item" href="">ประวัติการสั่งซื้อ</a><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-light text-uppercase font-weight-bold px-3" href="">
+          <a class="nav-link text-light text-uppercase font-weight-bold px-3" href=""><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
             Sign Out <i class="fas fa-sign-out-alt"></i>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-light text-uppercase font-weight-bold px-3" href="">
+          <a class="nav-link text-light text-uppercase font-weight-bold px-3" href=""><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
             Sign Up <i class="fas fa-user-plus"></i>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-light text-uppercase font-weight-bold px-3" href="">
+          <a class="nav-link text-light text-uppercase font-weight-bold px-3" href=""><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
             Sign In <i class="fas fa-sign-in-alt"></i>
           </a>
         </li>
       <li class="nav-item">
-        <a class="nav-link text-light text-uppercase font-weight-bold px-3" href="">
+        <a class="nav-link text-light text-uppercase font-weight-bold px-3" href="cartdetail"><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
           <i class="fas fa-shopping-cart"></i>0
       </a>
     </li>
@@ -48,7 +49,7 @@
       <div class="input-group">
         <input type="text" name="title" class="form-control" placeholder="Search">
         <div class="input-group-append">
-          <button type="submit" class="btn btn-warning"><i class="fas fa-search"></i></button>
+          <button type="submit" class="btn btn-danger"><i class="fas fa-search"></i></button>
         </div>
       </div>
     </form>

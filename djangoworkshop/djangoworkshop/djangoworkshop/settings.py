@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'store'
+    'store',
+    'django.contrib.humanize'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.menu_links'
             ],
         },
     },
@@ -84,9 +86,11 @@ WSGI_APPLICATION = 'djangoworkshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # เปลี่ยนจาก sqlite3 ไปเป็น mysql
-        'NAME': 'storedb',
-        'USER': 'root',
-        'PASSWORD': ''
+        'NAME':'storedb',
+        'USER':'root',
+        'PASSWORD':'',
+        'HOST':'localhost',
+        'PORT':''
     }
 }
 
