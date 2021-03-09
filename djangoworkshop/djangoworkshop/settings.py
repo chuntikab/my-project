@@ -23,9 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'lg0vdj+rx=k0bfrc0yny^ln%a+2f%+pz4zjf)tro!+g_&t70i1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # 
 
 ALLOWED_HOSTS = []
+
+# path เก็บข้อมูลไฟล์
+STATIC_URL='/static/'
+STATIC_ROOT=os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR, 'static', 'media')
 
 
 # Application definition
@@ -76,8 +83,10 @@ WSGI_APPLICATION = 'djangoworkshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql', # เปลี่ยนจาก sqlite3 ไปเป็น mysql
+        'NAME': 'storedb',
+        'USER': 'root',
+        'PASSWORD': ''
     }
 }
 
