@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Category(models.Model): # หมวดหมู่
@@ -8,6 +9,15 @@ class Category(models.Model): # หมวดหมู่
     #แปลง object ให้เป็น str
     def __str__(self):
         return self.name
+
+    class Meta : # เปลี่ยนให้เป็นชื่อภาษาไทย 
+        ordering=('name',) # ใช้ในการ sort เช่น sort ตาม name
+        verbose_name='หมวดหมู่สินค้า'
+        verbose_name_plural="ข้อมูลประเภทสินค้า"
+        # สาเหตุที่ต้อง ระบุ class Meta เพราะใน DB เราต้องตั้งชื่อฐานข้อมูล ชื่อตารางเป็น Eng การทำ class Meta ช่วยให้ทำงานง่ายชึ้น
+
+    def get_url(self): 
+        return reverse('product_by_category',args=[self.slug]) # ....
 
 class Product(models.Model): # สินค้า
     name=models.CharField(max_length=255,unique=True) #ชื่อ
@@ -23,6 +33,11 @@ class Product(models.Model): # สินค้า
 
     def __str__(self):
         return self.name
+
+    class Meta : # เปลี่ยนให้เป็นชื่อภาษาไทย
+        ordering=('name',) # ใช้ในการ sort เช่น sort ตาม name
+        verbose_name='สินค้า'
+        verbose_name_plural="ข้อมูลสินค้า"
 
 
 

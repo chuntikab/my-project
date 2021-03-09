@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-dark"> <!-- navbar คือ menu ย่อยมาจากโครงสร้าง layouts-->
     
-    <a href="/" class="navbar-brand"><i class="fas fa-heartbeat text-warning fa-2x"></i></a> <!-- เปลี่ยนสีโลโก้ -->
+    <a href="/" class="navbar-brand"><i class="fas fa-heartbeat text-danger fa-2x"></i></a> <!-- เปลี่ยนสีโลโก้ -->
     <button type="button" class="navbar-toggler bg-light" data-toggle="collapse"
      data-target="#nav" name="button"><span class="navbar-toggler-icon"></span></button> 
     
@@ -10,8 +10,10 @@
       <li class="nav-item dropdown"><a class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle"
         href="" data-toggle="dropdown">Category</a> <!-- -->
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">สินค้าทั้งหมด</a><!-- -->
-          <a class="dropdown-item" href="#">เสื้อผ้า</a><!-- -->
+          <a class="dropdown-item" href="{{category.get_url}}">{{category.name}}</a><!-- -->
+          {% for category in links %}
+          <a class="dropdown-item" href="{{category.get_url}}">{{category.name}}</a><!-- -->
+          {% endfor %}
         </div>
       </li>
         <li class="nav-item dropdown">

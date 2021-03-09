@@ -22,8 +22,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index),
     path('product/',views.product),
+    path('',views.index,name="home"),
+    path('category/<slug:category_slug>',views.index,name="product_by_category")
 ]
 
 # เช็คว่าเราเปิด DEBUG หรือไม่
