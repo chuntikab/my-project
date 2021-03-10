@@ -73,3 +73,24 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
     except Exception as e:
         pass
     return render(request,'cartdetail.html',dict(cart_items=cart_items,total=total,counter=counter))
+
+def removeCart(request,product_id): # ลบของในตะกร้าสินค้า
+    # ทำงานกับตะกร้าสินค้า
+    cart=Cart.objects.get(cart_id=_cart_id(request)) # เข้าถึงตะกร้าสินค้าได้แล้ว
+    # ทำงานกับสินค้าที่จะลบ  ex product id = 1
+    product=get_object_or_404(Product,id=product_id) # เข้าถึงสินค้าได้แล้ว ด้วย product_id
+    cartItem=CartItem.objects.get(product=product,cart=cart) # เช็คว่ารหัสสินค้าใดเป็น 1 แล้วอยู่ในตะกร้าสินค้าที่กำหนด
+    # ลบรายการสินค้า 1 ออกจากตะกร้า A โดยลบจาก รายการสินค้าในตะกร้า (CartItem)
+    cartItem.delete()
+    return redirect('cartdetail') # เมื่อลบเสร็จก็ค้างอยู่ที่หน้าตะกร้าสินค้าเดิม
+
+def removeCart(request,product_id):
+    #ทำงานกับตะกร้าสินค้า A
+    cart=Cart.objects.get(cart_id=_cart_id(request))
+    #ทำงานกับสินค้าที่จะลบ 1
+    product=get_object_or_404(Product,id=product_id)
+    cartItem=CartItem.objects.get(product=product,cart=cart)
+    #ลบรายการสินค้า 1 ออกจากตะกร้า A โดยลบจาก รายการสินค้าในตะกร้า (CartItem)
+    cartItem.delete()
+    return redirect('cartdetail')
+

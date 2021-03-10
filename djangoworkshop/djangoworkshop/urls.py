@@ -26,7 +26,8 @@ urlpatterns = [
     path('category/<slug:category_slug>',views.index,name="product_by_category"),
     path('product/<slug:category_slug>/<slug:product_slug>',views.productPage,name='productDetail'),
     path('cart/add/<int:product_id>',views.addCart,name="addCart"),
-    path('cartdetail/',views.cartdetail,name="cartdetail")
+    path('cartdetail/',views.cartdetail,name="cartdetail"),
+    path('cart/remove/<int:product_id>',views.removeCart,name="removeCart")
 ]
 
 #product/fashion/shoes

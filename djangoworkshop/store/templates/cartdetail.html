@@ -6,7 +6,9 @@
 
 <div class="container">
     {% if not cart_items %}
-        <p>ไม่มีสินค้าในตะกร้า</p>
+        <div class="alert alert-danger my-2" role="alert">
+            <b>ไม่มีสินค้าในตะกร้า</b>
+        </div>
     {% else %}
     <div class="table-responsive cart_info">
         <table class="table table-condensed">
@@ -14,7 +16,7 @@
                 <tr class="cart_menu">
                     <td class="image">รายการสินค้า</td> <!-- แก้ -->
                     <td class="description"></td> <!-- แก้ -->
-                    <td class="price">แต้มคะแนน</td> <!-- แก้ -->
+                    <td class="price">คะแนน</td> <!-- แก้ -->
                     <td class="quantity">จำนวน</td> <!-- แก้ -->
                     <td class="total">รวม</td> <!-- แก้ -->
                     <td></td>
@@ -40,7 +42,7 @@
                         <p class="cart_total_price">{{item.sub_total| intcomma}}</p>
                     </td>
                     <td class="cart_delete">
-                        <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                        <a class="cart_quantity_delete" onclick="return confirm('คุณต้องการลบสินค้าออกจากตะกร้าหรือไม่ ?')" href="{% url 'removeCart' item.product.id %}"><i class="fa fa-times"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
