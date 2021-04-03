@@ -1,0 +1,18 @@
+<!-- หน้า sign in customer -->
+{% extends 'layouts.html' %} <!-- extend จาก layouts -->
+{% block content%}
+{% load crispy_forms_tags %}
+
+<div class="container"> <!-- BOOTSTRAP -->
+    <h2 align="center">ลงชื่อเข้าใช้ระบบ HiBLOOD SHOP</h2> <!-- เดิมจาก views.py(2A)-3A , ไปต่อที่ navbar.html(4A)-->
+    <!-- from 2-part36(views.py), now signin.html(3-part36) -->
+    <form method="POST"> 
+        {% csrf_token %} <!-- เป็นการกรอง สคริปที่จะเข้ามา -->
+        {{form | crispy}} 
+        <input type="submit" value="Login" class="btn btn-success">
+    </form>
+</div>
+
+{% endblock %}
+
+

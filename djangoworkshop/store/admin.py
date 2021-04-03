@@ -1,4 +1,4 @@
-from django.contrib import admin # ลงทะเบียน หรือ อัพขอมูลขึ้น db และแสดงส่วน admin dashboard ด้วย
+from django.contrib import admin # ลงทะเบียน หรือ อัพข้อมูลขึ้น db และแสดงส่วน admin dashboard ด้วย
 from store.models import Category,Product,Cart,CartItem
 
 

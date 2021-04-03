@@ -1,0 +1,17 @@
+<!-- หน้า sign up customer -->
+{% extends 'layouts.html' %} <!-- extend จาก layouts -->
+{% block content%}
+{% load crispy_forms_tags %}
+
+<div class="container"> <!-- BOOTSTRAP -->
+    <h2 align="center">แบบฟอร์มลงทะเบียน</h2>
+    <form method="POST"> 
+        <p>{{form | crispy}}</p>
+        {% csrf_token %} <!-- กันการ hack ผ่านฟอร์ม -->
+        <input type="submit" class="btn btn-primary" value="Register">
+    </form>
+</div>
+
+{% endblock %}
+
+
