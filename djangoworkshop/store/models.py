@@ -3,7 +3,9 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
-class Category(models.Model): # หมวดหมู่
+
+# หมวดหมู่
+class Category(models.Model): 
     name=models.CharField(max_length=255,unique=True) #ข้อมูลเป็นตัวอักษรขนาดไม่เกิน 255 แบบห้ามซ้ำกัน หรือ unique (auto increament)
     slug=models.SlugField(max_length=255,unique=True) #slug เป็นการตั้งชื่อเล่นให้ข้อมูลในโมเดล #generate url ไปกับชื่อสินค้า
 
@@ -20,7 +22,8 @@ class Category(models.Model): # หมวดหมู่
     def get_url(self): 
         return reverse('product_by_category',args=[self.slug]) # ....
 
-class Product(models.Model): # สินค้า
+# สินค้า
+class Product(models.Model): 
     name=models.CharField(max_length=255,unique=True) #ชื่อ
     slug=models.SlugField(max_length=255,unique=True) 
     description=models.TextField(blank=True) #รายละเอียด
@@ -44,7 +47,8 @@ class Product(models.Model): # สินค้า
     def get_url(self): 
         return reverse('productDetail',args=[self.category.slug,self.slug]) # ....
 
-class Cart(models.Model): #ตะกร้าสินค้า / มีการนำคุณสมบัติ models มาใช้
+# ตะกร้าสินค้า / มีการนำคุณสมบัติ models มาใช้
+class Cart(models.Model): 
     cart_id=models.CharField(max_length=255,blank=True) # เป็นค่าว่างได้
     date_added=models.DateTimeField(auto_now_add=True) # เก็บวันเวลาที่สร้างตะกร้าสินค้า/วันที่ผู้ใช้บริการหยิบสินค้าลงตะกร้า
 
@@ -59,8 +63,8 @@ class Cart(models.Model): #ตะกร้าสินค้า / มีกา�
         verbose_name='ตะกร้าสินค้า'
         verbose_name_plural="ข้อมูลตะกร้าสินค้า"
 
-
-class CartItem(models.Model): # รายการสินค้าในตะกร้า / โยงข้อมูลกับ2โมเดล คือ โมเดลตะกร้าสินค้าที่ใช้จัดเก้บ และ โมเดลสินค้า
+# รายการสินค้าในตะกร้า / โยงข้อมูลกับ2โมเดล คือ โมเดลตะกร้าสินค้าที่ใช้จัดเก้บ และ โมเดลสินค้า
+class CartItem(models.Model): 
     product=models.ForeignKey(Product,on_delete=models.CASCADE) 
     cart=models.ForeignKey(Cart,on_delete=models.CASCADE) 
     quantity=models.IntegerField() # จำนวนรายการสินค้าที่เพิ่มลงตะกร้า
@@ -75,12 +79,60 @@ class CartItem(models.Model): # รายการสินค้าในตะ
 
     # ฟังก์ชันในการคำนวนหาผลรวม
     def sub_total(self): 
-        return self.product.price * self.quantity # <!-- แก้ราคา **************************ใส่เป็นแต้มคะแนน*******************************-->
+        return self.product.price * self.quantity # <!-- แก้ราคา @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ใส่เป็นแต้มคะแนน*******************************-->
 
     # เปลี่ยนตัว obj ให้เป็น str
     def __str__(self):
         return self.product.name
 
+# ใบสั่งซื้อ
+class Order(models.Model):
+    # 1 เก็บชื่อลูกค้า
+    name=models.CharField(max_length=255,blank=True)
+    # 2 ที่อยู่
+    address=models.CharField(max_length=255,blank=True)
+    # 3 เมือง
+    city=models.CharField(max_length=255,blank=True)
+    # 4 รหัสไปรษณีย์
+    postcode=models.CharField(max_length=255,blank=True)
+    # 5 ยอดที่ต้องชำระ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แต้มที่ต้องแลกทั้งหมด
+    total=models.DecimalField(max_digits=10,decimal_places=2)
+    # 6 email
+    email=models.EmailField(max_length=250,blank=True)
+    # 7 token / ถูกโยนเมื่อมีการใช้ API ชำระเงิน
+    token=models.CharField(max_length=255,blank=True)
+
+    # DB : สร้างตาราง
+    class Meta:
+        # ตารางชื่อว่า Order
+        db_table='Order' 
+    # การแสดงผล
+    def __str__(self):
+        return str(self.id)
+
+# รายการสินค้าภายในใบสั่งซื้อ
+# โมเดลที่ผูกกับ โมเดลorder
+class OrderItem(models.Model):
+    # 1 ชื่อสินค้านั้น 
+    product=models.CharField(max_length=250)
+    # 2 จำนวน
+    quantity=models.IntegerField()
+    # 3 ราคา @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แต้ม
+    price=models.DecimalField(max_digits=10,decimal_places=2)
+    # 4 อ้างอิงไปใบสั่งซืิ้อ
+    order=models.ForeignKey(Order,on_delete=models.CASCADE)
+
+    # DB : สร้างตาราง
+    class Meta:
+        db_table='OrderItem'
+
+    # ยอดรวมของสินค้าแต่ละรายการ
+    def sub_total(self):
+        return self.quantity * self.price
+
+    # การแสดงข้อมูลของสินค้า ในส่วนของ Admin Dashboard
+    def __str__(self):
+        return self.product
 
 
 

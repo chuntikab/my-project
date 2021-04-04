@@ -63,8 +63,9 @@
         </a>
       </li>
   
+    <!-- ช่อง Search เพื่อค้นหา-->
     </ul>
-    <form class="form-inline ml-3" action="", method="GET">
+    <form class="form-inline ml-3" action="{% url 'search' %}", method="GET"> <!-- set url ใน action / from views.py(2C), now navbar.html(3C)-->
       <div class="input-group">
         <input type="text" name="title" class="form-control" placeholder="Search">
         <div class="input-group-append">

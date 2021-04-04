@@ -114,7 +114,7 @@ def removeCart(request,product_id): # ลบของในตะกร้าส
     # เมื่อลบเสร็จก็ค้างอยู่ที่หน้าตะกร้าสินค้าเดิม
     return redirect('cartdetail') 
 
-def removeCart(request,product_id):
+def removeCart(request,product_id): # เอาสินค้าออกจากตะกร้า
     #ทำงานกับตะกร้าสินค้า A
     cart=Cart.objects.get(cart_id=_cart_id(request))
     #ทำงานกับสินค้าที่จะลบ 1
@@ -167,7 +167,15 @@ def signInView(request): # กรณีมีบัญชีแล้ว / เ�
         form=AuthenticationForm() # from 1-part36,now 2-part36(views.py) go to signin.html(3-part36)
     return render(request,'signIn.html',{'form':form}) # เดิมจาก urls.py(1A)-2A ไปต่อที่ templates-signIn.html(3A) , 
 
-# from 1B ไปต่อที่ views.py(2B), now (2B) go to  navbar.html(3B) / part39
+# from urls.py(1B) ไปต่อที่ views.py(2B), now (2B) go to  navbar.html(3B) / part39
 def signOutView(request): # ออกจากระบบ
     logout(request)
     return redirect('signIn')
+
+# from urls.py(1C), now is views.py(2C) go to navbar.html(3C)
+def serach(request): # ช่อง search
+    # ทำการ query ข้อมูล คือวิ่งไปที่ Product / filter ทำการกรองข้อมูลจาก product ตาม name ที่ส่งมา เงื่อนไขคือ ดึงข้อมูลรายการที่มีคำว่า "ex.เสื้อ" แล้วมาเก็บลง object product
+    products=Product.objects.filter(name__contains=request.GET['title'])
+    # แสดงผลเฉพาะ
+    return render(request,'index.html',{'products':products})
+

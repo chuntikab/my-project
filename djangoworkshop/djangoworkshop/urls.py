@@ -30,7 +30,8 @@ urlpatterns = [
     path('cart/remove/<int:product_id>',views.removeCart,name="removeCart"),
     path('account/create',views.signUpView,name="signUp"),
     path('account/login',views.signInView,name="signIn"), # name="signIn" = อ้างอิงไปยัง path account login / start 1A ไปต่อที่ views.py(2A)
-    path('account/logout',views.signOutView,name="signOut") # name="signout" = อ้างอิงไปยัง path log out / start 1B ไปต่อที่ views.py(2B) / part39
+    path('account/logout',views.signOutView,name="signOut"), # name="signout" = อ้างอิงไปยัง path log out / start 1B ไปต่อที่ views.py(2B) / part39
+    path('serach/',views.serach,name='search') # name="search" = อ้างอิงไปยัง path serach / start 1C ไปต่อที่ views.py(2C)
 ]
 
 #product/fashion/shoes
