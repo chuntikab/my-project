@@ -103,11 +103,16 @@ class Order(models.Model):
     email=models.EmailField(max_length=250,blank=True)
     # 7 token / ถูกโยนเมื่อมีการใช้ API ชำระเงิน
     token=models.CharField(max_length=255,blank=True)
+    # วันที่บันทึกข้อมูลสินค้า ณ ปัจจุบันที่บันทึกเลย
+    created=models.DateTimeField(auto_now_add=True) 
+    # ข้อมูลวัน ณ ปัจจุบันที่ทำงานอยู่
+    updated=models.DateTimeField(auto_now=True) 
 
     # DB : สร้างตาราง
     class Meta:
         # ตารางชื่อว่า Order
         db_table='Order' 
+        ordering=('id',)
     # การแสดงผล
     def __str__(self):
         return str(self.id)
@@ -123,10 +128,13 @@ class OrderItem(models.Model):
     price=models.DecimalField(max_digits=10,decimal_places=2)
     # 4 อ้างอิงไปใบสั่งซืิ้อ
     order=models.ForeignKey(Order,on_delete=models.CASCADE)
+    created=models.DateTimeField(auto_now_add=True) #วันที่บันทึกข้อมูลสินค้า ณ ปัจจุบันที่บันทึกเลย
+    updated=models.DateTimeField(auto_now=True) #ข้อมูลวัน ณ ปัจจุบันที่ทำงานอยู่
 
     # DB : สร้างตาราง
     class Meta:
         db_table='OrderItem'
+        ordering=('order',)
 
     # ยอดรวมของสินค้าแต่ละรายการ
     def sub_total(self):
@@ -135,7 +143,6 @@ class OrderItem(models.Model):
     # การแสดงข้อมูลของสินค้า ในส่วนของ Admin Dashboard
     def __str__(self):
         return self.product
-
 
 
 

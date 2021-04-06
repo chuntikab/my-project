@@ -118,7 +118,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
             token=request.POST['stripeToken']
             email=request.POST['stripeEmail']
             name=request.POST['stripeBillingName']  # ตัวแรกเป็นชื่อ column / ตัวหลังเป็น ที่เรารับ request มาจาก stripe ที่ส่งมา ^^^^^
-            address=request.POSt['stripeBillingAddressLine1']
+            address=request.POST['stripeBillingAddressLine1']
             city=request.POST['stripeBillingAddressCity']
             postcode=request.POST['stripeBillingAddressZip']
 
@@ -136,7 +136,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 customer=customer.id
             )
             # บันทึกข้อมูลใบคำสั่งซื้อ
-            order=Order.object.create(
+            order=Order.objects.create(
                 name=name, # ตัวแรกเป็นชื่อ column / ตัวหลังเป็น ที่เรารับ request มาจาก stripe ที่ส่งมา ^^^^^
                 address=address,
                 city=city,
@@ -146,10 +146,11 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 token=token
             ) 
             order.save()
+            
 
             # บันทึกรายการสั่งซื้อ
             for item in cart_items:
-                order_item=OrderItem.object.create(
+                order_item=OrderItem.objects.create( # defined ค่า object แค่ 4 ตัว
                     product=item.product.name,
                     quantity=item.quantity,
                     price=item.product.price,
@@ -159,11 +160,11 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 order_item.save() 
                 # ลดจำนวน Stock @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ หักแต้ม @@@@@@@@@@@@@@@@@@@@@
                 # //เก็บจำนวน อยู่ที่ model Product
-                product=Product.object.get(id=order_item.product.id) 
+                product=Product.objects.get(id=item.product.id) 
                 # //คือ เราเข้าถึง order_item ที่เป็น product และเข้าถึง column stock เพื่อไปเอา stock ของสินค้าที่เราได้ไปทำการสั่งซื้อมา - quauntity
-                product.stock=int(order_item.product.stock - order_item.quantity)
+                product.stock=int(item.product.stock - order_item.quantity)
                 product.save()
-                # เ8ลียร์ ตะกร้าสินค้า
+                # เคลียร์ ตะกร้าสินค้า
                 item.delete()
             return redirect('home')
         
