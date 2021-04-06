@@ -20,3 +20,19 @@ def counter(request):
         except Cart.DoesNotExist:
             item_count=0
     return dict(item_count=item_count)
+
+def counter2(request):
+    ttpoints=900
+    if 'admin' in request.path: # เช็คผ่าน path
+        return {}
+    else:
+        try:    
+            # query cart
+            cart=Cart.objects.filter(cart_id=_cart_id(request)) 
+            # query cartitem
+            cart_Item=CartItem.objects.all().filter(cart=cart[:1]) # เก็บผลลัพที่ได้จากการดึงฐานข้อมูลรายการสินค้าในตะกร้า  / :1 โยน รหัสสินค้าเข้าไป
+            for item in cart_Item:
+                ttpoints=0
+        except Cart.DoesNotExist:
+            ttpoints=900
+    return dict(ttpoints=ttpoints)

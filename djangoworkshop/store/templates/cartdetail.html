@@ -16,7 +16,7 @@
                 <tr class="cart_menu">
                     <td class="image">รายการสินค้า</td> <!-- แก้ -->
                     <td class="description"></td> <!-- แก้ -->
-                    <td class="price">คะแนน</td> <!-- แก้ -->
+                    <td class="price">บาท</td> <!-- แก้ -->
                     <td class="quantity">จำนวน</td> <!-- แก้ -->
                     <td class="total">รวม</td> <!-- แก้ -->
                     <td></td>
@@ -49,7 +49,7 @@
             </tbody>
         </table>
     </div>
-    <h4 class="text-right">ยอด {{total| intcomma}} แต้มคะแนน</h4> <!-- แก้เป็น แต้ม ******************* -->
+    <h4 class="text-right">ยอดหลักหักส่วนลด  {{total| intcomma}}  บาท</h4> <!-- แก้เป็น แต้ม ******************* -->
     <form class="" action="" method="POST">
         {% csrf_token %}
         <script src="https://checkout.stripe.com/checkout.js"

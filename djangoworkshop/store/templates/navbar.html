@@ -27,8 +27,13 @@
           <!-- ทำการเช็คว่า ตอนนี้ลูกค้าทำการ log in เข้ามาหรือยัง รวมถึงเช็คว่าได้กรอกชื่อจริงเข้ามาหรือไม่ เพราะเราจะเอาชื่อจริงมาแสดงด้วย -->
           {% if request.user.is_authenticated and request.user.first_name %} <!-- Ref-part 37-38 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
           <a class="nav-link text-light text-uppercase font-weight-bold px-4 dropdown-toggle" data-toggle="dropdown">
-            Welcome, {{ request.user.first_name }} <br>
-            No point <i class="fas fa-user circle"></i></a><!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แก้ หลังชื่อจริง ให้มีแต้มคะแนนด้วยย -->
+            {% if item_count >= 0%}
+              Welcome, {{ request.user.first_name }} <br>
+              900 point <i class="fas fa-user circle"></i>
+            {% else %}
+              0
+            {% endif %}
+            </a><!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แก้ หลังชื่อจริง ให้มีแต้มคะแนนด้วยย -->
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{% url 'orderHistory'%}">ประวัติการสั่งซื้อ</a><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
           </div>

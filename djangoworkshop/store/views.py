@@ -1,6 +1,6 @@
 # ส่วนของการให้ render ของหน้าเว็บนั้นๆ
 from django.shortcuts import render, get_object_or_404, redirect 
-from store.models import Category,Product,Cart,CartItem,OrderItem,Order# เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
+from store.models import Category,Product,Cart,CartItem,OrderItem,Order,Userpoint # เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
 from store.forms import SignUpForm
 from django.contrib.auth.models import Group,User
 from django.contrib.auth.forms import AuthenticationForm #start 1-part36 go to 2-part36(views.py)
@@ -12,6 +12,22 @@ from django.conf import settings # PUBLIC_KEY and SECRET_KEY
 import stripe
 
 # Create your views here.
+# def pointss(request,totalpoints):
+#     total=0 # ราคาทั้งหมด
+#     counter=0 # จำนวนสินค้าในตะกร้า
+#     cart_item=None # รายการสินค้าแต่ละรายการ ที่ได้จากการ loop
+#     # ดึงข้อมูลจากฐานข้อมูล
+#     try:
+#         # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
+#         cart=Cart.objects.get(cart_id=_cart_id(request)) 
+#         # ดึงข้อมูลสินค้าในตะกร้า
+#         cart_items=CartItem.objects.filter(cart=cart,active=True) 
+#         for item in cart_items:
+#             total += ((item.product.price * item.quantity)  - totalpoints)
+#             counter += item.quantity 
+#     except Exception as e:
+#         pass
+
 def index(request,category_slug=None): # หน้าแรก
     products=None
     category_page=None
@@ -91,9 +107,10 @@ def addCart(request,product_id):
         cart_item.save()
     return redirect('cartdetail')
 
-     
+   
 def cartdetail(request): # หน้าตะกร้าสินค้า
     total=0 # ราคาทั้งหมด
+    total1=0
     counter=0 # จำนวนสินค้าในตะกร้า
     cart_item=None # รายการสินค้าแต่ละรายการ ที่ได้จากการ loop
     # ดึงข้อมูลจากฐานข้อมูล
@@ -103,8 +120,9 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
         # ดึงข้อมูลสินค้าในตะกร้า
         cart_items=CartItem.objects.filter(cart=cart,active=True) 
         for item in cart_items:
-            total += (item.product.price * item.quantity)
-            counter += item.quantity 
+            total1 += (item.product.price * item.quantity)
+            counter += item.quantity
+        total=total1-900
     except Exception as e:
         pass
 
@@ -214,7 +232,7 @@ def signUpView(request): # กรณียังไม่มีบัญชี /
 def signInView(request): # กรณีมีบัญชีแล้ว / เข้าใช้ระบบ
     if request.method=='POST':
         form=AuthenticationForm(data=request.POST)
-        # เช็คความถูกต้องของข้อม฿ล โดยใช้ตัว Authenticate ของ Django
+        # เช็คความถูกต้องของข้อมูล โดยใช้ตัว Authenticate ของ Django
         if form.is_valid():
             # หากมีการป้อน username , ก็จะรับเข้ามาเก็บที่ตัวแปร username
             username=request.POST['username'] 
