@@ -1,4 +1,4 @@
-# ส่วนของการ สร้างตาราง DB
+# ส่วนของการ สร้างตาราง DB ใน mysql
 from django.db import models
 from django.urls import reverse
 
@@ -14,6 +14,7 @@ class Category(models.Model):
         return self.name
 
     class Meta : # เปลี่ยนให้เป็นชื่อภาษาไทย 
+        db_table='category'
         ordering=('name',) # ใช้ในการ sort เช่น sort ตาม name
         verbose_name='หมวดหมู่สินค้า'
         verbose_name_plural="ข้อมูลประเภทสินค้า"
@@ -39,6 +40,7 @@ class Product(models.Model):
         return self.name
 
     class Meta :
+        db_table='product'
         ordering=('name',) # ใช้ในการ sort เช่น sort ตาม name
         # เปลี่ยนให้เป็นชื่อภาษาไทย
         verbose_name='สินค้า'

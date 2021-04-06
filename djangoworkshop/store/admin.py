@@ -1,6 +1,6 @@
 # ส่วนการทำงานของ Admin Dashboard
 from django.contrib import admin # ลงทะเบียนหรืออัพข้อมูลขึ้น db และ แสดงส่วน admin dashboard ด้วย
-from store.models import Category,Product,Cart,CartItem
+from store.models import Category,Product,Cart,CartItem,Order,OrderItem
 
 # Register your models here.
 
@@ -17,4 +17,5 @@ admin.site.register(Category)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Cart)
 admin.site.register(CartItem)
-
+admin.site.register(Order)
+admin.site.register(OrderItem)

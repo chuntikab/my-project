@@ -50,6 +50,21 @@
         </table>
     </div>
     <h4 class="text-right">ยอด {{total| intcomma}} แต้มคะแนน</h4> <!-- แก้เป็น แต้ม ******************* -->
+    <form class="" action="" method="POST">
+        {% csrf_token %}
+        <script src="https://checkout.stripe.com/checkout.js"
+        class="stripe-button"
+        data-key="{{ data_key }}"  
+        data-amount="{{ stripe_total }}"  
+        data-name="HiBlood Shop"
+        data-description="{{ description }}"
+        data-locale="Thailand"
+        data-currency="thb"
+        data-shipping-address="true"
+        data-billing-address="true"
+        data-zip-code="true">
+        </script>
+    </form>
 
     {% endif %}
 

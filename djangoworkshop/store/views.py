@@ -1,11 +1,15 @@
 # ส่วนของการให้ render ของหน้าเว็บนั้นๆ
 from django.shortcuts import render, get_object_or_404, redirect 
-from store.models import Category,Product,Cart,CartItem #from django.http import HttpResponse // ตัดออก 9 กพ
+from store.models import Category,Product,Cart,CartItem,OrderItem,Order# เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
 from store.forms import SignUpForm
 from django.contrib.auth.models import Group,User
 from django.contrib.auth.forms import AuthenticationForm #start 1-part36 go to 2-part36(views.py)
 from django.contrib.auth import login, authenticate, logout
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from django.contrib.auth.decorators import login_required # การบังคับให้ login ก่อนเพิ่มสินค้าลงตะกร้า
+from django.contrib.auth.decorators import login_required
+from django.conf import settings # PUBLIC_KEY and SECRET_KEY
+import stripe
 
 # Create your views here.
 def index(request,category_slug=None): # หน้าแรก
@@ -51,6 +55,8 @@ def _cart_id(request): # sessions ฝังข้อมูลการสั่�
         cart=request.session.create()
     return cart
 
+# หากมีการ เรียกการใช้งาน def add cart แล้วยังไม่มีการ เข้าใช้งานระบบ(log in) จะต้องมีการ redirect ไปหน้า log in
+@login_required(login_url='signIn') # มีการระบุ path ของ log in
 def addCart(request,product_id):
     # รหัสสินค้า
     # ดึงสินค้าตามรหัสที่ส่งมา
@@ -85,6 +91,7 @@ def addCart(request,product_id):
         cart_item.save()
     return redirect('/')
         
+@login_required(login_url='signIn')
 def cartdetail(request): # หน้าตะกร้าสินค้า
     total=0 # ราคาทั้งหมด
     counter=0 # จำนวนสินค้าในตะกร้า
@@ -100,7 +107,71 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
             counter += item.quantity 
     except Exception as e:
         pass
-    return render(request,'cartdetail.html',dict(cart_items=cart_items,total=total,counter=counter))
+
+    stripe.api_key=settings.SECRET_KEY
+    stripe_total=int(total*100) # stripe มองไม่เห็นเลข 0 2ตัวหลัง
+    description="Payment Online" # Payment Online ชำระเงิน เป็น @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ชำระแต้ม @@@@@@@@@@@@@@@@@@@@
+    data_key=settings.PUBLIC_KEY
+
+    if request.method=="POST":
+        try:
+            token=request.POST['stripeToken']
+            email=request.POST['stripeEmail']
+            name=request.POST['stripeBillingName']  # ตัวแรกเป็นชื่อ column / ตัวหลังเป็น ที่เรารับ request มาจาก stripe ที่ส่งมา ^^^^^
+            address=request.POSt['stripeBillingAddressLine1']
+            city=request.POST['stripeBillingAddressCity']
+            postcode=request.POST['stripeBillingAddressZip']
+
+            #print(request.POST)
+            
+            # สรา้ง และ เก็บข้อมูล ลง stripe API 
+            customer=stripe.Customer.create(
+                email=email,
+                source=token
+            )
+            charge=stripe.Charge.create(
+                amount=stripe_total,
+                currency='thb',
+                description=description,
+                customer=customer.id
+            )
+            # บันทึกข้อมูลใบคำสั่งซื้อ
+            order=Order.object.create(
+                name=name, # ตัวแรกเป็นชื่อ column / ตัวหลังเป็น ที่เรารับ request มาจาก stripe ที่ส่งมา ^^^^^
+                address=address,
+                city=city,
+                postcode=postcode,
+                total=total,
+                email=email,
+                token=token
+            ) 
+            order.save()
+
+            # บันทึกรายการสั่งซื้อ
+            for item in cart_items:
+                order_item=OrderItem.object.create(
+                    product=item.product.name,
+                    quantity=item.quantity,
+                    price=item.product.price,
+                    order=order
+                )
+                # บันทึกลง ฐานข้อมูล
+                order_item.save() 
+                # ลดจำนวน Stock @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ หักแต้ม @@@@@@@@@@@@@@@@@@@@@
+                # //เก็บจำนวน อยู่ที่ model Product
+                product=Product.object.get(id=order_item.product.id) 
+                # //คือ เราเข้าถึง order_item ที่เป็น product และเข้าถึง column stock เพื่อไปเอา stock ของสินค้าที่เราได้ไปทำการสั่งซื้อมา - quauntity
+                product.stock=int(order_item.product.stock - order_item.quantity)
+                product.save()
+                # เ8ลียร์ ตะกร้าสินค้า
+                item.delete()
+            return redirect('home')
+        
+        except stripe.error.CardError as e:
+            return False , e
+
+    return render(request,'cartdetail.html',
+    dict(cart_items=cart_items,total=total,counter=counter,data_key=data_key,stripe_total=stripe_total,description=description))
 
 def removeCart(request,product_id): # ลบของในตะกร้าสินค้า
     # ทำงานกับตะกร้าสินค้า
@@ -113,16 +184,6 @@ def removeCart(request,product_id): # ลบของในตะกร้าส
     cartItem.delete()
     # เมื่อลบเสร็จก็ค้างอยู่ที่หน้าตะกร้าสินค้าเดิม
     return redirect('cartdetail') 
-
-def removeCart(request,product_id): # เอาสินค้าออกจากตะกร้า
-    #ทำงานกับตะกร้าสินค้า A
-    cart=Cart.objects.get(cart_id=_cart_id(request))
-    #ทำงานกับสินค้าที่จะลบ 1
-    product=get_object_or_404(Product,id=product_id)
-    cartItem=CartItem.objects.get(product=product,cart=cart)
-    #ลบรายการสินค้า 1 ออกจากตะกร้า A โดยลบจาก รายการสินค้าในตะกร้า (CartItem)
-    cartItem.delete()
-    return redirect('cartdetail')
 
 def signUpView(request): # กรณียังไม่มีบัญชี /  ลงทะเบียน 
     #อ้างอิงไปยัง field ที่กำหนด 
