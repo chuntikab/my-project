@@ -15,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     # ดูได้จาก ฐานข้อมูลใน sql
-    list_display=['id','name','total','token','created','updated'] 
+    list_display=['id','name','email','total','token','created','updated'] 
     list_per_page=5
 
 class OrderItemAdmin(admin.ModelAdmin):

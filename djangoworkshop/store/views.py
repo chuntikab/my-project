@@ -89,9 +89,9 @@ def addCart(request,product_id):
             quantity=1
         )
         cart_item.save()
-    return redirect('/')
-        
-@login_required(login_url='signIn')
+    return redirect('cartdetail')
+
+     
 def cartdetail(request): # หน้าตะกร้าสินค้า
     total=0 # ราคาทั้งหมด
     counter=0 # จำนวนสินค้าในตะกร้า
@@ -166,13 +166,17 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 product.save()
                 # เคลียร์ ตะกร้าสินค้า
                 item.delete()
-            return redirect('home')
+            return redirect('thankyou')
         
         except stripe.error.CardError as e:
             return False , e
 
+    #return render(request,'cartdetail.html',dict(cart_items=cart_items,total=total,counter=counter,data_key=data_key,stripe_total=stripe_total,description=description))
     return render(request,'cartdetail.html',
-    dict(cart_items=cart_items,total=total,counter=counter,data_key=data_key,stripe_total=stripe_total,description=description))
+    dict(cart_items=cart_items,total=total,counter=counter,
+    data_key=data_key,
+    stripe_total=stripe_total,
+    description=description))
 
 def removeCart(request,product_id): # ลบของในตะกร้าสินค้า
     # ทำงานกับตะกร้าสินค้า
@@ -241,3 +245,18 @@ def serach(request): # ช่อง search
     # แสดงผลเฉพาะ
     return render(request,'index.html',{'products':products})
 
+def orderHistory(request):
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        orders=Order.objects.filter(email=email)
+    return render(request,'orders.html',{'orders':orders})
+
+def viewOrder(request,order_id):
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        order=Order.objects.get(email=email,id=order_id)
+        orderitem=OrderItem.objects.filter(order=order)
+    return render(request,'viewOrder.html',{'order': order, 'order_items': orderitem})
+
+def thankyou(request):
+    return render(request,'thankyou.html')
