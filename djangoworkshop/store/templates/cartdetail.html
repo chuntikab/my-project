@@ -49,7 +49,7 @@
             </tbody>
         </table>
     </div>
-    <h4 class="text-right">ยอดหลักหักส่วนลด  {{total| intcomma}}  บาท</h4> <!-- แก้เป็น แต้ม ******************* -->
+    <h4 class="text-right">ยอดหลังหักส่วนลด  {{ total_after_point | intcomma}}  บาท</h4> <!-- แก้เป็น แต้ม ******************* -->
     <form class="" action="" method="POST">
         {% csrf_token %}
         <script src="https://checkout.stripe.com/checkout.js"

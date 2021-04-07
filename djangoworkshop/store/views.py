@@ -107,23 +107,39 @@ def addCart(request,product_id):
         cart_item.save()
     return redirect('cartdetail')
 
-   
+
 def cartdetail(request): # หน้าตะกร้าสินค้า
-    total=0 # ราคาทั้งหมด
-    total1=0
-    counter=0 # จำนวนสินค้าในตะกร้า
-    cart_item=None # รายการสินค้าแต่ละรายการ ที่ได้จากการ loop
-    # ดึงข้อมูลจากฐานข้อมูล
+    item_count=0
+    point=900
+    total=0 #//////
+    totalBefore=0
+    total_after_point=0
+    counter=0 #//////
+    cart_item=None #//////
+
     try:
-        # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
-        cart=Cart.objects.get(cart_id=_cart_id(request)) 
-        # ดึงข้อมูลสินค้าในตะกร้า
-        cart_items=CartItem.objects.filter(cart=cart,active=True) 
-        for item in cart_items:
-            total1 += (item.product.price * item.quantity)
-            counter += item.quantity
-        total=total1-900
-    except Exception as e:
+        try:
+            point=900
+            # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
+            cart=Cart.objects.get(cart_id=_cart_id(request)) #cart=Cart.objects.filter(cart_id=_cart_id(request)) 
+            # ดึงข้อมูลสินค้าในตะกร้า
+            cart_items=CartItem.objects.filter(cart=cart,active=True) #cart_Item=CartItem.objects.all().filter(cart=cart[:1]) 
+            for item in cart_items:
+                totalBefore += (item.product.price * item.quantity)
+                counter += item.quantity
+
+            total_after_point = totalBefore-point # ex (-200) = 700-900 / 1090 = 1990-900
+            #total = total_after_point
+            if total_after_point <= 0:
+                point = int(point-totalBefore)
+                total_after_point=0
+                total=total_after_point
+            else:
+                total=totalBefore-point
+                point = 0
+        except Exception as e:
+            pass
+    except Cart.DoesNotExist:
         pass
 
     stripe.api_key=settings.SECRET_KEY
@@ -165,7 +181,6 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
             ) 
             order.save()
             
-
             # บันทึกรายการสั่งซื้อ
             for item in cart_items:
                 order_item=OrderItem.objects.create( # defined ค่า object แค่ 4 ตัว
@@ -184,6 +199,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 product.save()
                 # เคลียร์ ตะกร้าสินค้า
                 item.delete()
+                point=0
             return redirect('thankyou')
         
         except stripe.error.CardError as e:

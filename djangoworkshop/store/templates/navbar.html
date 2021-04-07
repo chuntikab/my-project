@@ -23,26 +23,31 @@
         </div>
       </li>
 
+
         <li class="nav-item dropdown">
           <!-- ทำการเช็คว่า ตอนนี้ลูกค้าทำการ log in เข้ามาหรือยัง รวมถึงเช็คว่าได้กรอกชื่อจริงเข้ามาหรือไม่ เพราะเราจะเอาชื่อจริงมาแสดงด้วย -->
           {% if request.user.is_authenticated and request.user.first_name %} <!-- Ref-part 37-38 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
           <a class="nav-link text-light text-uppercase font-weight-bold px-4 dropdown-toggle" data-toggle="dropdown">
-            {% if item_count >= 0%}
-              Welcome, {{ request.user.first_name }} <br>
-              900 point <i class="fas fa-user circle"></i>
+            Welcome, {{ request.user.first_name }} <br>
+            {% if item_count > 0 %}
+              {{point}} point
             {% else %}
-              0
-            {% endif %}
-            </a><!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แก้ หลังชื่อจริง ให้มีแต้มคะแนนด้วยย -->
+              {{point}} point
+            {% endif %} <i class="fas fa-user circle"></i>
+            </a>  <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แก้ หลังชื่อจริง ให้มีแต้มคะแนนด้วยย -->
+
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{% url 'orderHistory'%}">ประวัติการสั่งซื้อ</a><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
           </div>
         </li>
+
+
         <li class="nav-item">
           <a class="nav-link text-light text-uppercase font-weight-bold px-4" href="{% url 'signOut'%}"><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
             Sign Out <i class="fas fa-sign-out-alt"></i> <!--sign out / #  from views.py(2B), now navbar.html(3B) / part39 -->
           </a>
         </li>
+
 
         <!-- ทำการเช็คว่า กรณีไม่มีการ log in ก็จะแสดง SignUp กับ SignIn -->
         {% else %}
@@ -51,6 +56,7 @@
             Sign Up <i class="fas fa-user-plus"></i> <!--sign up-->
           </a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link text-light text-uppercase font-weight-bold px-4" href="{% url 'signIn'%}"><!-- เดิมจาก signin.html(3A)-นี่คือ 4A , href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง(ในที่นี้คือ อ้างอิงผ่านชื่อ(ที่กำหนดชื่อ path ใน urls.py) เพื่อจะได้ไม่เกิด path ที่อาจซ้อนกัน)" -->
             Sign In <i class="fas fa-sign-in-alt"></i> <!--sign in-->
@@ -58,17 +64,19 @@
         </li>
         {% endif %}
 
+
       <li class="nav-item">
         <a class="nav-link text-light text-uppercase font-weight-bold px-4" href="{% url 'cartdetail'%}"><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->
           <i class="fas fa-shopping-cart"></i>
           {% if item_count > 0%}
-            {{item_count}}
+            {{item_count}}  
           {% else %}
-            0
+            0 
           {% endif %}
         </a>
       </li>
   
+
     <!-- ช่อง Search เพื่อค้นหา-->
     </ul>
     <form class="form-inline ml-3" action="{% url 'search' %}", method="GET"> <!-- set url ใน action / from views.py(2C), now navbar.html(3C)-->
