@@ -10,7 +10,7 @@
             <img class="card-img-top img-fluid" src="{{product.image.url}}" alt=""> <!--  -->
             <div class="card-body">
               <h3 class="card-title">{{product.name}}</h3><!--  -->
-              <h4>{{product.price| intcomma}} คะแนน</h4><!-- **************************ใส่เป็นแต้มคะแนน*******************************-->
+              <h4>{{product.price| intcomma}} บาท</h4><!-- **************************ใส่เป็นแต้มคะแนน*******************************-->
               <p class="card-text">{{product.description}}</p><!--  -->
               {% if product.stock <= 0 %}
                 <h2 class="text-danger">สินค้าหมด</h2>

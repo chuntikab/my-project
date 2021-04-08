@@ -1,6 +1,6 @@
 # ส่วนของการให้ render ของหน้าเว็บนั้นๆ
 from django.shortcuts import render, get_object_or_404, redirect 
-from store.models import Category,Product,Cart,CartItem,OrderItem,Order# เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
+from store.models import Category,Product,Cart,CartItem,OrderItem,Order,Userpoint # เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
 from store.forms import SignUpForm
 from django.contrib.auth.models import Group,User
 from django.contrib.auth.forms import AuthenticationForm #start 1-part36 go to 2-part36(views.py)
@@ -12,6 +12,8 @@ from django.conf import settings # PUBLIC_KEY and SECRET_KEY
 import stripe
 
 # Create your views here.
+
+
 def index(request,category_slug=None): # หน้าแรก
     products=None
     category_page=None
@@ -89,27 +91,51 @@ def addCart(request,product_id):
             quantity=1
         )
         cart_item.save()
-    return redirect('/')
-        
-@login_required(login_url='signIn')
+    return redirect('cartdetail')
+
+
 def cartdetail(request): # หน้าตะกร้าสินค้า
-    total=0 # ราคาทั้งหมด
-    counter=0 # จำนวนสินค้าในตะกร้า
-    cart_item=None # รายการสินค้าแต่ละรายการ ที่ได้จากการ loop
-    # ดึงข้อมูลจากฐานข้อมูล
+    global point
+    item_count=0
+    point=900
+    total=0 #//////
+    totalBefore=0
+    total_after_point=0
+    counter=0 #//////
+    cart_item=None #//////
+
     try:
-        # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
-        cart=Cart.objects.get(cart_id=_cart_id(request)) 
-        # ดึงข้อมูลสินค้าในตะกร้า
-        cart_items=CartItem.objects.filter(cart=cart,active=True) 
-        for item in cart_items:
-            total += (item.product.price * item.quantity)
-            counter += item.quantity 
-    except Exception as e:
+        try:
+            #global point
+            #point=900
+            # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
+            cart=Cart.objects.get(cart_id=_cart_id(request)) #cart=Cart.objects.filter(cart_id=_cart_id(request)) 
+            # ดึงข้อมูลสินค้าในตะกร้า
+            cart_items=CartItem.objects.filter(cart=cart,active=True) #cart_Item=CartItem.objects.all().filter(cart=cart[:1]) 
+            for item in cart_items:
+                totalBefore += (item.product.price * item.quantity)
+                counter += item.quantity
+
+            total_after_point = totalBefore-point # ex (-200) = 700-900 / 1090 = 1990-900
+            #total = total_after_point
+            if total_after_point <= 0:
+                #nonlocal point
+                point = int(point-totalBefore)
+                total_after_point=0
+                total=total_after_point
+            else:
+                #nonlocal point
+                total=totalBefore-point
+                point = 0
+        except Exception as e:
+            pass
+    except Cart.DoesNotExist:
         pass
 
     stripe.api_key=settings.SECRET_KEY
-    stripe_total=int(total*100) # stripe มองไม่เห็นเลข 0 2ตัวหลัง
+    can_pay_hiblood=int(500*100) # //////////////////////////////////////////////////////////////////////////////// หลอกให้จ่ายเงินได้แม้ 0 บาท
+    stripe_total=int(total*100)
+     # stripe มองไม่เห็นเลข 0 2ตัวหลัง
     description="Payment Online" # Payment Online ชำระเงิน เป็น @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ชำระแต้ม @@@@@@@@@@@@@@@@@@@@
     data_key=settings.PUBLIC_KEY
 
@@ -130,7 +156,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 source=token
             )
             charge=stripe.Charge.create(
-                amount=stripe_total,
+                amount=stripe_total+can_pay_hiblood, # //////////////////////////////////////////////////////////////////////////////// หลอกให้จ่ายเงินได้แม้ 0 บาท
                 currency='thb',
                 description=description,
                 customer=customer.id
@@ -147,7 +173,6 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
             ) 
             order.save()
             
-
             # บันทึกรายการสั่งซื้อ
             for item in cart_items:
                 order_item=OrderItem.objects.create( # defined ค่า object แค่ 4 ตัว
@@ -166,13 +191,17 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 product.save()
                 # เคลียร์ ตะกร้าสินค้า
                 item.delete()
-            return redirect('home')
+            return redirect('thankyou')
         
         except stripe.error.CardError as e:
             return False , e
 
+    #return render(request,'cartdetail.html',dict(cart_items=cart_items,total=total,counter=counter,data_key=data_key,stripe_total=stripe_total,description=description))
     return render(request,'cartdetail.html',
-    dict(cart_items=cart_items,total=total,counter=counter,data_key=data_key,stripe_total=stripe_total,description=description))
+    dict(cart_items=cart_items,total=total,counter=counter,
+    data_key=data_key,
+    stripe_total=stripe_total,
+    description=description))
 
 def removeCart(request,product_id): # ลบของในตะกร้าสินค้า
     # ทำงานกับตะกร้าสินค้า
@@ -210,7 +239,7 @@ def signUpView(request): # กรณียังไม่มีบัญชี /
 def signInView(request): # กรณีมีบัญชีแล้ว / เข้าใช้ระบบ
     if request.method=='POST':
         form=AuthenticationForm(data=request.POST)
-        # เช็คความถูกต้องของข้อม฿ล โดยใช้ตัว Authenticate ของ Django
+        # เช็คความถูกต้องของข้อมูล โดยใช้ตัว Authenticate ของ Django
         if form.is_valid():
             # หากมีการป้อน username , ก็จะรับเข้ามาเก็บที่ตัวแปร username
             username=request.POST['username'] 
@@ -241,3 +270,18 @@ def serach(request): # ช่อง search
     # แสดงผลเฉพาะ
     return render(request,'index.html',{'products':products})
 
+def orderHistory(request):
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        orders=Order.objects.filter(email=email)
+    return render(request,'orders.html',{'orders':orders})
+
+def viewOrder(request,order_id):
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        order=Order.objects.get(email=email,id=order_id)
+        orderitem=OrderItem.objects.filter(order=order)
+    return render(request,'viewOrder.html',{'order': order, 'order_items': orderitem})
+
+def thankyou(request):
+    return render(request,'thankyou.html')

@@ -144,8 +144,24 @@ class OrderItem(models.Model):
     def __str__(self):
         return self.product
 
+class Userpoint(models.Model):
+    # 1 เก็บชื่อลูกค้า
+    name=models.CharField(max_length=255,blank=True)
+    totalp=models.DecimalField(max_digits=10,decimal_places=2)
+    # วันที่บันทึกข้อมูลสินค้า ณ ปัจจุบันที่บันทึกเลย
+    #created=models.DateTimeField(auto_now_add=True) 
+    # ข้อมูลวัน ณ ปัจจุบันที่ทำงานอยู่
+    updated=models.DateTimeField(auto_now=True) 
 
+    # DB : สร้างตาราง
+    class Meta:
+        # ตารางชื่อว่า Order
+        db_table='totalpoints' 
+        #ordering=('id',)
 
+    # การแสดงผล
+    def __str__(self):
+        return self.name
 
 
 

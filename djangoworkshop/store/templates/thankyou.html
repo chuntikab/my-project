@@ -1,0 +1,19 @@
+<!-- หน้าแรก -->
+{% extends 'layouts.html' %} <!-- extend จาก layouts -->
+{% load static %}
+
+{% block content%}
+<div class="container"> <!-- BOOTSTRAP -->
+    <div class="jumbotron my-4">
+        <h1 class="display-4">Thank You!</h1>
+        <p class="lead">ศูนย์บริการโลหิตแห่งชาติ สภากาชาดไทยขอขอบคุณสำหรับการซื้อสินค้ากับทางเรา</p>
+        <hr class="my-4">
+        <p>ดำเนินการชำระเงินเรียบร้อย กำลังเตรียมการจัดส่ง รอรับสินค้าได้เลย</p>
+        <!-- <p class="lead">
+          <a class="btn btn-primary btn-lg" href="{% url 'home' %}" role="button">ซื้อสินค้าเพิ่มเติม</a>
+        </p> -->
+      </div>
+</div>
+{% endblock %}
+
+

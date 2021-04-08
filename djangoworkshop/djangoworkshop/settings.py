@@ -74,7 +74,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'store.context_processors.menu_links',
-                'store.context_processors.counter'
+                'store.context_processors.counter',
+                'store.context_processors.counterPoint'
             ],
         },
     },
