@@ -60,6 +60,9 @@ def counterPoint(request):
                 total=totalBefore-point
                 point = 0
                 print(2,point)
+                print(2,point)
+                print(2,point)
+                print(2,point)
                 #return point
             # if 'thankyou' in request.path and counter==0:
             #     point2+=point

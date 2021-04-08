@@ -27,6 +27,11 @@ class UserPointsAdmin(admin.ModelAdmin):
     list_display=['name','totalp'] 
     list_per_page=5
 
+# class UserPointsAdmin(admin.ModelAdmin):
+#     # ดูได้จาก ฐานข้อมูลใน sql
+#     list_display=['name','totalp'] 
+#     list_per_page=5
+
 admin.site.register(Category)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Cart)
