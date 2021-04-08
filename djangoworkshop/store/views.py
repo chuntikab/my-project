@@ -12,21 +12,7 @@ from django.conf import settings # PUBLIC_KEY and SECRET_KEY
 import stripe
 
 # Create your views here.
-# def pointss(request,totalpoints):
-#     total=0 # ราคาทั้งหมด
-#     counter=0 # จำนวนสินค้าในตะกร้า
-#     cart_item=None # รายการสินค้าแต่ละรายการ ที่ได้จากการ loop
-#     # ดึงข้อมูลจากฐานข้อมูล
-#     try:
-#         # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
-#         cart=Cart.objects.get(cart_id=_cart_id(request)) 
-#         # ดึงข้อมูลสินค้าในตะกร้า
-#         cart_items=CartItem.objects.filter(cart=cart,active=True) 
-#         for item in cart_items:
-#             total += ((item.product.price * item.quantity)  - totalpoints)
-#             counter += item.quantity 
-#     except Exception as e:
-#         pass
+
 
 def index(request,category_slug=None): # หน้าแรก
     products=None
@@ -109,6 +95,7 @@ def addCart(request,product_id):
 
 
 def cartdetail(request): # หน้าตะกร้าสินค้า
+    global point
     item_count=0
     point=900
     total=0 #//////
@@ -119,7 +106,8 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
 
     try:
         try:
-            point=900
+            #global point
+            #point=900
             # ดึงตะกร้า / ตรงนี้มีการฝัง sessions แล้ว
             cart=Cart.objects.get(cart_id=_cart_id(request)) #cart=Cart.objects.filter(cart_id=_cart_id(request)) 
             # ดึงข้อมูลสินค้าในตะกร้า
@@ -131,10 +119,12 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
             total_after_point = totalBefore-point # ex (-200) = 700-900 / 1090 = 1990-900
             #total = total_after_point
             if total_after_point <= 0:
+                #nonlocal point
                 point = int(point-totalBefore)
                 total_after_point=0
                 total=total_after_point
             else:
+                #nonlocal point
                 total=totalBefore-point
                 point = 0
         except Exception as e:
@@ -143,7 +133,9 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
         pass
 
     stripe.api_key=settings.SECRET_KEY
-    stripe_total=int(total*100) # stripe มองไม่เห็นเลข 0 2ตัวหลัง
+    can_pay_hiblood=int(500*100) # //////////////////////////////////////////////////////////////////////////////// หลอกให้จ่ายเงินได้แม้ 0 บาท
+    stripe_total=int(total*100)
+     # stripe มองไม่เห็นเลข 0 2ตัวหลัง
     description="Payment Online" # Payment Online ชำระเงิน เป็น @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ชำระแต้ม @@@@@@@@@@@@@@@@@@@@
     data_key=settings.PUBLIC_KEY
 
@@ -164,7 +156,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 source=token
             )
             charge=stripe.Charge.create(
-                amount=stripe_total,
+                amount=stripe_total+can_pay_hiblood, # //////////////////////////////////////////////////////////////////////////////// หลอกให้จ่ายเงินได้แม้ 0 บาท
                 currency='thb',
                 description=description,
                 customer=customer.id
@@ -199,7 +191,6 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 product.save()
                 # เคลียร์ ตะกร้าสินค้า
                 item.delete()
-                point=0
             return redirect('thankyou')
         
         except stripe.error.CardError as e:

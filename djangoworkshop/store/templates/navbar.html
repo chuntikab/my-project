@@ -29,10 +29,10 @@
           {% if request.user.is_authenticated and request.user.first_name %} <!-- Ref-part 37-38 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
           <a class="nav-link text-light text-uppercase font-weight-bold px-4 dropdown-toggle" data-toggle="dropdown">
             Welcome, {{ request.user.first_name }} <br>
-            {% if item_count > 0 %}
-              {{point}} point
+            {% if item_count > 0 %} <!-- แก้  "=" //////////////////////////////////////////////////////////////////////////////-->
+              แต้มที่เหลือ {{point}} point
             {% else %}
-              {{point}} point
+              แต้มที่เหลือ 0 point
             {% endif %} <i class="fas fa-user circle"></i>
             </a>  <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แก้ หลังชื่อจริง ให้มีแต้มคะแนนด้วยย -->
 

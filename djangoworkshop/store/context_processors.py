@@ -22,16 +22,21 @@ def counter(request):
     return dict(item_count=item_count)
 
 def counterPoint(request):
+    global point,point2,total_after_point,total_after_point
     item_count=0
-    point=900
     total=0
     totalBefore=0
-    total_after_point=0
+
     counter=0 
     if 'admin' in request.path: # เช็คผ่าน path
         return {}
-    else:
-        try:    
+    elif not 'home' in request.path :
+        point=900
+        if point>0 :
+        #try:    
+            #point=900
+            point2=1
+            total_after_point=0
             # query cart
             cart=Cart.objects.filter(cart_id=_cart_id(request)) 
             # query cartitem
@@ -43,13 +48,36 @@ def counterPoint(request):
 
             total_after_point = totalBefore-point # ex (-200) = 700-900 / 1090 = 1990-900
             #total = total_after_point
-            if total_after_point <= 0:
+            if total_after_point <= 0 and not 'thankyou' in request.path:
+                #nonlocal point
                 point = int(point-totalBefore)
                 total_after_point=0
                 total=total_after_point
-            else:
+                print(1,point)
+                #return point
+            else :
+                #nonlocal point
                 total=totalBefore-point
                 point = 0
-        except Cart.DoesNotExist:
-            point = 0
-    return dict(item_count=item_count,total=total,point=point,total_after_point=total_after_point,totalBefore=totalBefore)
+                print(2,point)
+                #return point
+            # if 'thankyou' in request.path and counter==0:
+            #     point2+=point
+            #     print(3,point2) 
+        else:       
+        #except Cart.DoesNotExist:
+            if 'thankyou' in request.path and counter==0:
+                point2+=point
+                print(3,point2)
+
+
+        # if 'thankyou' in request.path and counter==0:
+        #         point2+=point
+        #         print(3,point2)
+
+        # if 'thankyou' in request.path:
+        #     point=0
+            
+
+
+    return dict(item_count=item_count,total=total,point=point,total_after_point=total_after_point,totalBefore=totalBefore,point2=point2)

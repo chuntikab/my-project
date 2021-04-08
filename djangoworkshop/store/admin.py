@@ -24,7 +24,7 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_per_page=5
 class UserPointsAdmin(admin.ModelAdmin):
     # ดูได้จาก ฐานข้อมูลใน sql
-    list_display=['name','totalp','updated'] 
+    list_display=['name','totalp'] 
     list_per_page=5
 
 admin.site.register(Category)
