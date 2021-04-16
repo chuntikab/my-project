@@ -69,8 +69,11 @@ def counterPoint(request):
             if 'thankyou' in request.path and counter==0:
                 point2+=point
                 print(3,point2)
+                
                 print(3,point2)
                 print(3,point2)
                 print(3,point2)
+                print(3,point2)
+
 
     return dict(item_count=item_count,total=total,point=point,total_after_point=total_after_point,totalBefore=totalBefore,point2=point2)
