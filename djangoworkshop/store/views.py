@@ -28,7 +28,7 @@ def index(request,category_slug=None): # หน้าแรก
 
     # set ว่าจะแบ่งสินค้า จำนวน 4 ชิ้น/หน้า 
     # 8 / 3 = 3 page
-    paginator=Paginator(products,3)
+    paginator=Paginator(products,6)
     # set เลขหน้าเป็นค่าเริ่มต้น
     try:
         page=int(request.GET.get('page','1'))
@@ -232,9 +232,10 @@ def signUpView(request): # กรณียังไม่มีบัญชี /
             customer_group=Group.objects.get(name="Customer")
             #นำ Group ที่ดึงมาจากฐานข้อมูล กำหนดให้กับ user
             customer_group.user_set.add(signUpUser)
+            return redirect('signIn') #FIX
     else :
         form=SignUpForm()
-    return render(request,"signup.html",{'form':form}) 
+    return render(request,"signup.html",{'form':form}) #FIX /// return render(request,"signUp.html",{'form':form})
 
 def signInView(request): # กรณีมีบัญชีแล้ว / เข้าใช้ระบบ
     if request.method=='POST':

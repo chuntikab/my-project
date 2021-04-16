@@ -8,7 +8,7 @@
     </button>  -->
     
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="nav"> <!-- div class="collapse navbar-collapse justify-content-between" id="nav" /// เปลี่ยนสี ขนาด โลโก้ -->
-    <ul class="navbar-nav">
+    <ul class="navbar-nav ml-auto">
 
       <a href="/" class="navbar-brand"><i class="fas fa-heartbeat text-danger fa-3x"></i></a> <!-- เปลี่ยนสี ขนาด โลโก้ -->
       <button type="button" class="navbar-toggler bg-light" data-toggle="collapse"
@@ -28,10 +28,7 @@
           {% endfor %}
         </div>
       </li>
-    </ul>
 
-    <div class="navbar-collapse ">
-      <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
           <!-- ทำการเช็คว่า ตอนนี้ลูกค้าทำการ log in เข้ามาหรือยัง รวมถึงเช็คว่าได้กรอกชื่อจริงเข้ามาหรือไม่ เพราะเราจะเอาชื่อจริงมาแสดงด้วย -->
           {% if request.user.is_authenticated and request.user.first_name %} <!-- Ref-part 37-38 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -71,10 +68,20 @@
           </a>
         </li>
         {% endif %}
-      </ul>
-    </div>
-    
-    <!-- ตะกร้าสินค้า -->
+
+
+      <!-- <li class="nav-item ">
+        <a class="nav-link text-light text-uppercase font-weight-bold p-4" href="{% url 'cartdetail'%}">
+          <i class="fas fa-shopping-cart"></i>
+          {% if item_count > 0%}
+            {{item_count}}  
+          {% else %}
+            0 
+          {% endif %}
+        </a>
+      </li> -->
+    </ul>
+
     <div class="navbar-collapse ">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
@@ -87,7 +94,7 @@
             {% endif %}
           </a>
         </li>
-      </ul>
+    </ul>
     </div>
 
     <!-- ช่อง Search เพื่อค้นหา-->

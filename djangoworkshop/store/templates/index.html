@@ -8,10 +8,9 @@
 <div class="container"> <!-- BOOTSTRAP -->
     <div class="row my-3">
     {% for product in products %}
-
-    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="col-lg-4 col-md-6 mb-4 ">
         <div class="card h-100">
-          <a href="#"><img class="card-img-top" src="{{product.image.url}}" alt=""></a><!-- แก้ภาพ -->
+          <a href="#"><img class="card-img-top" src="{{product.image.url}}" alt="" width="" height=""></a><!-- แก้ภาพ -->
           <div class="card-body">
             <h4 class="card-title">
               <a href="{{product.get_url}}">{{product.name}}</a><!-- แก้ชื่อ -->
@@ -31,6 +30,7 @@
         </div>
       </div>
     {% endfor %}
+
     </div>
     <nav aria-label="pagination">
       {% if products.paginator.num_pages > 1 %}
