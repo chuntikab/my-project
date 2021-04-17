@@ -157,6 +157,7 @@ class Userpoint(models.Model):
     class Meta:
         # ตารางชื่อว่า Order
         db_table='totalpoints' 
+        ordering=('id',)
         #ordering=('id',)
 
     # การแสดงผล
