@@ -2,12 +2,11 @@
 from django.shortcuts import render, get_object_or_404, redirect 
 from store.models import Category,Product,Cart,CartItem,OrderItem,Order,Userpoint # เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
 from store.forms import SignUpForm
-from django.contrib.auth.models import Group,User
+from django.contrib.auth.models import Group,User # check กลุ่ม กับ ผู้ใช้
 from django.contrib.auth.forms import AuthenticationForm #start 1-part36 go to 2-part36(views.py)
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout # check การlogin การยืนยันความถูกต้องตรงกัน การlogout
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.contrib.auth.decorators import login_required # การบังคับให้ login ก่อนเพิ่มสินค้าลงตะกร้า
-from django.contrib.auth.decorators import login_required
 from django.conf import settings # PUBLIC_KEY and SECRET_KEY
 import stripe
 
@@ -93,7 +92,7 @@ def addCart(request,product_id):
         cart_item.save()
     return redirect('cartdetail')
 
-
+@login_required(login_url='signIn')
 def cartdetail(request): # หน้าตะกร้าสินค้า
     global point
     item_count=0
