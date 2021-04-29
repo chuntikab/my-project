@@ -1,4 +1,4 @@
-# ส่วนการทำงานของ Admin Dashboard
+# class การทำงานของ Admin Dashboard
 from django.contrib import admin # ลงทะเบียนหรืออัพข้อมูลขึ้น db และ แสดงส่วน admin dashboard ด้วย
 from store.models import Category,Product,Cart,CartItem,Order,OrderItem,Userpoint
 
@@ -22,15 +22,11 @@ class OrderItemAdmin(admin.ModelAdmin):
     # ดูได้จาก ฐานข้อมูลใน sql
     list_display=['order','product','quantity','price','created','updated'] 
     list_per_page=5
+
 class UserPointsAdmin(admin.ModelAdmin):
     # ดูได้จาก ฐานข้อมูลใน sql
     list_display=['name','totalp'] 
     list_per_page=5
-
-# class UserPointsAdmin(admin.ModelAdmin):
-#     # ดูได้จาก ฐานข้อมูลใน sql
-#     list_display=['name','totalp'] 
-#     list_per_page=5
 
 admin.site.register(Category)
 admin.site.register(Product,ProductAdmin)

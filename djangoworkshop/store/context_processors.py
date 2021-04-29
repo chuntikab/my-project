@@ -31,6 +31,7 @@ def counterPoint(request):
     if 'admin' in request.path: # เช็คผ่าน path
         return {}
     elif not 'home' in request.path :
+        #point=Userpoint.objects.get(totalpoints_id=totalpoints_id)# ex.point=900
         point=900
         if point>0 :
         #try:    
@@ -47,37 +48,19 @@ def counterPoint(request):
                 counter += item.quantity
 
             total_after_point = totalBefore-point # ex (-200) = 700-900 / 1090 = 1990-900
-            #total = total_after_point
             if total_after_point <= 0 and not 'thankyou' in request.path:
-                #nonlocal point
                 point = int(point-totalBefore)
                 total_after_point=0
                 total=total_after_point
                 print(1,point)
-                #return point
             else :
-                #nonlocal point
                 total=totalBefore-point
                 point = 0
                 print(2,point)
-                #return point
-            # if 'thankyou' in request.path and counter==0:
-            #     point2+=point
-            #     print(3,point2) 
+
         else:       
-        #except Cart.DoesNotExist:
             if 'thankyou' in request.path and counter==0:
                 point2+=point
                 print(3,point2)
-
-
-        # if 'thankyou' in request.path and counter==0:
-        #         point2+=point
-        #         print(3,point2)
-
-        # if 'thankyou' in request.path:
-        #     point=0
-            
-
 
     return dict(item_count=item_count,total=total,point=point,total_after_point=total_after_point,totalBefore=totalBefore,point2=point2)

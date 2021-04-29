@@ -1,4 +1,4 @@
-# ส่วนของการให้ render ของหน้าเว็บนั้นๆ
+# class ส่วนของการให้ render ของหน้าเว็บนั้นๆ
 from django.shortcuts import render, get_object_or_404, redirect 
 from store.models import Category,Product,Cart,CartItem,OrderItem,Order,Userpoint # เป็นการ import ตัวต่างๆ ลงไปในฐานข้อมูล เครื่อง server ของเรา //from django.http import HttpResponse // ตัดออก 9 กพ
 from store.forms import SignUpForm
@@ -25,8 +25,8 @@ def index(request,category_slug=None): # หน้าแรก
     else :
         products=Product.objects.all().filter(available=True)
 
-    # set ว่าจะแบ่งสินค้า จำนวน 4 ชิ้น/หน้า 
-    # 8 / 3 = 3 page
+    # set ว่าจะแบ่งสินค้า จำนวนกี่ชิ้น/หน้า 
+    # ex 8 / 3 = 3 page
     paginator=Paginator(products,6)
     # set เลขหน้าเป็นค่าเริ่มต้น
     try:
@@ -132,7 +132,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
         pass
 
     stripe.api_key=settings.SECRET_KEY
-    can_pay_hiblood=int(500*100) # //////////////////////////////////////////////////////////////////////////////// หลอกให้จ่ายเงินได้แม้ 0 บาท
+    can_pay_hiblood=int(500*100) 
     stripe_total=int(total*100)
      # stripe มองไม่เห็นเลข 0 2ตัวหลัง
     description="Payment Online" # Payment Online ชำระเงิน เป็น @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ชำระแต้ม @@@@@@@@@@@@@@@@@@@@
@@ -155,7 +155,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 source=token
             )
             charge=stripe.Charge.create(
-                amount=stripe_total+can_pay_hiblood, # //////////////////////////////////////////////////////////////////////////////// หลอกให้จ่ายเงินได้แม้ 0 บาท
+                amount=stripe_total+can_pay_hiblood, 
                 currency='thb',
                 description=description,
                 customer=customer.id
@@ -182,7 +182,7 @@ def cartdetail(request): # หน้าตะกร้าสินค้า
                 )
                 # บันทึกลง ฐานข้อมูล
                 order_item.save() 
-                # ลดจำนวน Stock @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ หักแต้ม @@@@@@@@@@@@@@@@@@@@@
+                # ลดจำนวน Stock 
                 # //เก็บจำนวน อยู่ที่ model Product
                 product=Product.objects.get(id=item.product.id) 
                 # //คือ เราเข้าถึง order_item ที่เป็น product และเข้าถึง column stock เพื่อไปเอา stock ของสินค้าที่เราได้ไปทำการสั่งซื้อมา - quauntity

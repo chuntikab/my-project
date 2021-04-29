@@ -1,4 +1,4 @@
-# ส่วนของการ สร้างตาราง DB ใน mysql
+# class ของการ สร้างตาราง DB ใน mysql
 from django.db import models
 from django.urls import reverse
 
@@ -28,7 +28,7 @@ class Product(models.Model):
     name=models.CharField(max_length=255,unique=True) #ชื่อ
     slug=models.SlugField(max_length=255,unique=True) 
     description=models.TextField(blank=True) #รายละเอียด
-    price=models.DecimalField(max_digits=10,decimal_places=2) #ราคา !!!!!!!!!!!!!!!!!!!
+    price=models.DecimalField(max_digits=10,decimal_places=2) #ราคา 
     category=models.ForeignKey(Category,on_delete=models.CASCADE) #ลบข้อมูลที่มีความสัมพันธ์กันระหว่าง 2 ตาราง กรณีที่มีความสัมพันธ์กัน เช่น ลบหมวดหมู่ + ลบสินค้า
     image=models.ImageField(upload_to="product",blank=True) #upload ภาพสินค้า ไปยัง Folder "product"
     stock=models.IntegerField()
@@ -81,7 +81,7 @@ class CartItem(models.Model):
 
     # ฟังก์ชันในการคำนวนหาผลรวม
     def sub_total(self): 
-        return self.product.price * self.quantity # <!-- แก้ราคา @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ใส่เป็นแต้มคะแนน*******************************-->
+        return self.product.price * self.quantity 
 
     # เปลี่ยนตัว obj ให้เป็น str
     def __str__(self):

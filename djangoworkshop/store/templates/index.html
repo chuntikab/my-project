@@ -1,4 +1,4 @@
-<!-- หน้าแรก -->
+<!-- หน้า home ที่แสดง -->
 {% extends 'layouts.html' %} <!-- extend จาก layouts -->
 {% load static %}
 {% load humanize %}<!-- ใส่ comma ตัวเลขราคา -->
@@ -15,7 +15,7 @@
             <h4 class="card-title">
               <a href="{{product.get_url}}">{{product.name}}</a><!-- แก้ชื่อ -->
             </h4>
-            <h5>{{product.price|intcomma}} บาท</h5> <!-- แก้ราคา **************************ใส่เป็นแต้มคะแนน*******************************-->
+            <h5>{{product.price|intcomma}} บาท</h5> <!-- แก้ราคา -->
             <p class="card-text">{{product.description | slice:":150" }}</p><!-- แก้รายละเอียดสินค้า -->
           </div>
           <div class="card-footer">

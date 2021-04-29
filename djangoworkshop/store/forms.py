@@ -1,4 +1,4 @@
-#โครงสร้าง-ดำเนินการเกี่ยวกับ แบบฟอร์มลงทะเบียน และ ตัวmodel user
+# class โครงสร้าง-ดำเนินการเกี่ยวกับ แบบฟอร์มลงทะเบียน และ ตัวmodel user
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.forms import UserCreationForm # เป็นการบอกว่าเราจะสร้าง user ขึ้นมาผ่าน แบบฟอร์ม // data binding

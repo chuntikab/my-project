@@ -1,11 +1,6 @@
-<!-- navbar คือ menu ย่อยมาจากโครงสร้าง layouts-->
+<!-- navbar คือ navigator ของหน้าเว็บ - ย่อยมาจาก layouts-->
     
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <!-- class="navbar navbar-expand-md navbar-light bg-dark ///navbar คือ menu ย่อยมาจากโครงสร้าง layouts-->
-<!--     
-    <a href="/" class="navbar-brand"><i class="fas fa-heartbeat text-danger fa-3x"></i></a>
-    <button type="button" class="navbar-toggler bg-light" data-toggle="collapse"
-     data-target="#nav" name="button"><span class="navbar-toggler-icon"></span>
-    </button>  -->
     
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="nav"> <!-- div class="collapse navbar-collapse justify-content-between" id="nav" /// เปลี่ยนสี ขนาด โลโก้ -->
     <ul class="navbar-nav">
@@ -22,9 +17,9 @@
       <li class="nav-item dropdown">
         <a class="nav-link text-light text-uppercase font-weight-bolder p-4 dropdown-toggle " href="" data-toggle="dropdown">Category</a> <!-- a class="nav-link text-light text-uppercase font-weight-bold px-4 dropdown-toggle"-->
         <div class="dropdown-menu ">
-          <a class="dropdown-item" href="{% url 'home' %}">สินค้าทั้งหมด</a><!-- -->
+          <a class="dropdown-item" href="{% url 'home' %}">สินค้าทั้งหมด</a>
           {% for category in links %}
-          <a class="dropdown-item" href="{{category.get_url}}">{{category.name}}</a><!-- -->
+          <a class="dropdown-item" href="{{category.get_url}}">{{category.name}}</a>
           {% endfor %}
         </div>
       </li>
@@ -34,15 +29,15 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
           <!-- ทำการเช็คว่า ตอนนี้ลูกค้าทำการ log in เข้ามาหรือยัง รวมถึงเช็คว่าได้กรอกชื่อจริงเข้ามาหรือไม่ เพราะเราจะเอาชื่อจริงมาแสดงด้วย -->
-          {% if request.user.is_authenticated and request.user.first_name %} <!-- Ref-part 37-38 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+          {% if request.user.is_authenticated and request.user.first_name %} <!-- Ref-part 37-38 -->
           <a class="nav-link text-light text-uppercase font-weight-bold p-4 dropdown-toggle" data-toggle="dropdown">
             Welcome, {{ request.user.first_name }} <br>
-            {% if item_count >= 0 %} <!-- แก้  "=" //////////////////////////////////////////////////////////////////////////////-->
+            {% if item_count >= 0 %} 
               แต้มที่เหลือ {{point}} point
             {% else %}
               แต้มที่เหลือ 0 point
             {% endif %} <i class="fas fa-user circle"></i>
-            </a>  <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ แก้ หลังชื่อจริง ให้มีแต้มคะแนนด้วยย -->
+          </a>  
 
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{% url 'orderHistory'%}">ประวัติการสั่งซื้อ</a><!-- href="" คือ การกดแล้วให้ไปที่ "ที่เรากำหนดปลายทาง" -->

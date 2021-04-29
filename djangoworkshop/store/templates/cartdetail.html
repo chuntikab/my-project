@@ -1,4 +1,4 @@
-<!-- หน้า ตะกร้าสินค้า -->
+<!-- หน้าตะกร้าสินค้า cart detail -->
 {% extends 'layouts.html' %} <!-- extend จาก layouts -->
 {% load static %}
 {% load humanize %} <!-- ใส่ comma ตัวเลขราคา -->
@@ -14,11 +14,10 @@
         <table class="table table-condensed">
             <thead>
                 <tr class="cart_menu">
-                    <td class="image">รายการสินค้า</td> <!-- แก้ -->
-                    <td class="description"></td> <!-- แก้ -->
-                    <td class="price">บาท</td> <!-- แก้ -->
-                    <td class="quantity">จำนวน</td> <!-- แก้ -->
-                    <td class="total">รวม</td> <!-- แก้ -->
+                    <td class="image">รายการสินค้า</td> 
+                    <td class="description"></td> 
+                    <td class="quantity">จำนวน</td> 
+                    <td class="total">รวม</td> 
                     <td></td>
                 </tr>
             </thead>
@@ -49,7 +48,7 @@
             </tbody>
         </table>
     </div>
-    <h4 class="text-right">ยอดหลังหักส่วนลด  {{ total_after_point | intcomma}}  บาท</h4> <!-- แก้เป็น แต้ม ******************* -->
+    <h4 class="text-right">ยอดหลังหักส่วนลด  {{ total_after_point | intcomma}}  บาท</h4> 
     <form class="" action="" method="POST">
         {% csrf_token %}
         <script src="https://checkout.stripe.com/checkout.js"

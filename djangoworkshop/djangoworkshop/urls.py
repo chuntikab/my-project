@@ -1,3 +1,4 @@
+# Django จัดมาให้ // ส่วนการสร้าง path
 """djangoworkshop URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

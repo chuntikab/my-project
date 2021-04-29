@@ -1,4 +1,4 @@
-# คือการผูก หรือลงทะเบียนแอพใหม่ของเราเพื่อให้จังโก้รู้จัก ex.'store'
+# Django จัดมาให้ // ส่วนการจัด # Application definition รวมถึง API
 """
 Django settings for djangoworkshop project.
 
